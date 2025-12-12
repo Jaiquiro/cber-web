@@ -28,7 +28,7 @@ export function Header() {
           <div className="h-8 w-8 rounded-full bg-emerald-500" />
           <div className="flex flex-col leading-tight">
             <span className="text-sm font-bold text-emerald-700">
-              Centro de Energías Renovables
+              Centro Boliviano de Energías Renovables
             </span>
             <span className="text-xs text-gray-500">
               Investigación · Innovación · Transición energética
@@ -57,6 +57,8 @@ export function Header() {
             );
           })}
         </nav>
+        {/* Futuro menú móvil */}
+        <div className="md:hidden text-gray-600 text-xl">☰</div>
       </div>
     </header>
   );

@@ -1,148 +1,198 @@
-// Home del Centro de Energías Renovables
-
 import Link from "next/link";
+import Image from "next/image";
+
+const BLOQUES_EXPLORA = [
+  {
+    href: "/sobre",
+    titulo: "Sobre el centro",
+    descripcion:
+      "Misión, visión, contexto institucional y alianzas estratégicas.",
+  },
+  {
+    href: "/publicaciones",
+    titulo: "Publicaciones",
+    descripcion:
+      "Artículos científicos, informes técnicos y otros resultados de investigación.",
+  },
+  {
+    href: "/proyectos",
+    titulo: "Proyectos",
+    descripcion:
+      "Proyectos en curso y finalizados relacionados con la transición energética.",
+  },
+  {
+    href: "/equipo",
+    titulo: "Equipo",
+    descripcion:
+      "Conoce al equipo de investigación y apoyo técnico del centro.",
+  },
+];
+const LINEAS_INVESTIGACION = [
+  {
+    id: "solar",
+    titulo: "Recurso solar fotovoltaico y térmico",
+    descripcion:
+      "Tecnologías solares, modelación del recurso y aplicaciones térmicas y eléctricas.",
+    imagen: "/images/so.jpg",
+  },
+  {
+    id: "eolica",
+    titulo: "Energía eólica y sistemas híbridos",
+    descripcion:
+      "Integración eólica, híbridos FV–eólico, simulación y operación de sistemas aislados.",
+    imagen: "/images/wi.jpg",
+  },
+  {
+    id: "hidrogeno",
+    titulo: "Hidrógeno verde y vectores energéticos",
+    descripcion:
+      "Producción, almacenamiento y aplicaciones industriales del hidrógeno verde.",
+    imagen: "/images/h2.jpg",
+  },
+];
 
 export default function HomePage() {
   return (
     <div className="space-y-12">
       {/* HERO PRINCIPAL */}
-      <section className="grid gap-8 md:grid-cols-2 md:items-center">
-        <div className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-500">
-            Centro de Energías Renovables
-          </p>
+      <section className="relative overflow-hidden rounded-[2rem] border border-cer-light shadow-xl">
+        {/* Imagen de fondo */}
+        <Image
+          src="/images/sd.jpg"
+          alt="Paisaje de energías renovables en Bolivia"
+          fill
+          priority
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
 
-          <h1 className="text-3xl font-bold md:text-4xl">
-            Investigación aplicada para la transición energética en Bolivia
-          </h1>
+        {/* Capa de degradado CER encima de la imagen */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cer-dark via-cer-green/60 to-cer-blue" />
 
-          <p className="text-sm text-gray-600 md:text-base">
-            Generamos conocimiento, proyectos y capacidades en energías
-            renovables, hidrógeno verde y eficiencia energética para acompañar
-            la descarbonización y la seguridad energética del país.
-          </p>
-
-          {/* Botones de acción rápida */}
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/publicaciones"
-              className="rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
-            >
-              Ver publicaciones
-            </Link>
-
-            <Link
-              href="/proyectos"
-              className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-white"
-            >
-              Proyectos de investigación
-            </Link>
-          </div>
-        </div>
-
-        {/* Caja lateral de noticias destacadas (contenido mock simple) */}
-        <div className="rounded-3xl border border-gray-200 bg-white p-6 text-sm shadow-sm">
-          <h2 className="mb-3 text-base font-semibold">Últimas noticias</h2>
-
-          <div className="space-y-3">
-            <div className="border-l-2 border-emerald-500 pl-3">
-              <p className="text-xs text-gray-500">
-                Convocatoria · 15 enero 2026
+        {/* Contenido del hero */}
+        <div className="relative px-6 py-8 md:px-10 md:py-10">
+          <div className="grid gap-8 md:grid-cols-2 md:items-center">
+            {/* Columna izquierda */}
+            <div className="space-y-4">
+              <p className="cer-section-subtitle">
+                Centro de Energías Renovables
               </p>
-              <Link
-                href="/noticias/programa-hidrogeno-verde-2026"
-                className="font-semibold hover:underline"
-              >
-                Lanzamiento del programa de investigación en hidrógeno verde
-                2026
-              </Link>
+
+              <h1 className="text-3xl font-bold text-white md:text-4xl">
+                Investigación aplicada para la transición energética en Bolivia
+              </h1>
+
+              <p className="text-sm text-gray-100 md:text-base">
+                El centro impulsa proyectos de investigación, formación y
+                transferencia tecnológica en energías renovables, hidrógeno
+                verde y eficiencia energética, articulando academia, sector
+                público y sector productivo.
+              </p>
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link href="/publicaciones" className="btn-primary">
+                  Ver publicaciones
+                </Link>
+
+                <Link href="/proyectos" className="btn-secondary">
+                  Proyectos de investigación
+                </Link>
+              </div>
             </div>
 
-            <div className="border-l-2 border-sky-500 pl-3">
-              <p className="text-xs text-gray-500">Evento · 3 febrero 2026</p>
-              <Link
-                href="/eventos/taller-hidrogeno-verde-introductorio"
-                className="font-semibold hover:underline"
-              >
-                Taller introductorio sobre hidrógeno verde
-              </Link>
+            {/* Columna derecha: noticias */}
+            <div className="space-y-4 text-sm text-white">
+              <h2 className="text-base font-semibold">Últimas novedades</h2>
+
+              <div className="space-y-3">
+                <Link
+                  href="/noticias/programa-hidrogeno-verde-2026"
+                  className="block cer-card-dark"
+                >
+                  <p className="text-xs text-gray-300">
+                    Convocatoria · 15 enero 2026
+                  </p>
+                  <p className="font-semibold text-white">
+                    Lanzamiento del programa de investigación en hidrógeno verde
+                    2026
+                  </p>
+                  <p className="mt-1 text-xs text-gray-200">
+                    Iniciativa orientada a proyectos de I+D en producción,
+                    almacenamiento y uso de hidrógeno verde.
+                  </p>
+                </Link>
+
+                <Link
+                  href="/eventos/taller-hidrogeno-verde-introductorio"
+                  className="block cer-card-dark"
+                >
+                  <p className="text-xs text-gray-300">
+                    Evento · 3 febrero 2026 · Virtual
+                  </p>
+                  <p className="font-semibold text-white">
+                    Taller introductorio sobre hidrógeno verde
+                  </p>
+                  <p className="mt-1 text-xs text-gray-200">
+                    Sesión de formación para profesionales e investigadores
+                    interesados en el vector hidrógeno.
+                  </p>
+                </Link>
+              </div>
+
+              <div className="flex justify-end">
+                <Link href="/noticias" className="cer-link text-cer-light">
+                  Ver todas las noticias →
+                </Link>
+              </div>
             </div>
           </div>
-
-          <Link
-            href="/noticias"
-            className="mt-4 inline-block text-xs font-semibold text-sky-600 hover:underline"
-          >
-            Ver todas las noticias →
-          </Link>
         </div>
       </section>
 
       {/* LÍNEAS DE INVESTIGACIÓN */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Líneas de investigación</h2>
-        <p className="text-sm text-gray-600">
-          El centro organiza su trabajo en varias líneas estratégicas que
-          combinan investigación aplicada, transferencia tecnológica y
-          formación de capacidades.
-        </p>
+      {/* Dentro de la sección “Líneas de investigación” */}
+      <div className="grid gap-6 md:grid-cols-3 mt-6">
+        {LINEAS_INVESTIGACION.map((linea) => (
+          <Link
+            key={linea.id}
+            href={`/proyectos?linea=${linea.id}`}
+            className="
+        group relative rounded-xl overflow-hidden shadow-lg 
+        transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl
+        cursor-pointer block
+      "
+            style={{
+              backgroundImage: `url(${linea.imagen})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            {/* Capa de oscurecimiento */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70"></div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            "Energía solar fotovoltaica y térmica",
-            "Energía eólica y sistemas híbridos",
-            "Hidrógeno verde y almacenamiento energético",
-            "Eficiencia energética y auditorías",
-            "Redes eléctricas inteligentes y microrredes",
-            "Modelación energética y políticas públicas",
-          ].map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl border border-gray-200 bg-white p-4 text-sm shadow-sm"
-            >
-              <p className="font-medium">{item}</p>
+            {/* Contenido */}
+            <div className="relative p-6 text-white">
+              <h3 className="text-lg font-semibold mb-2">{linea.titulo}</h3>
+              <p className="text-sm opacity-90">{linea.descripcion}</p>
             </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* BLOQUES DE NAVEGACIÓN */}
+      <section className="cer-section">
+        <h2 className="text-xl font-semibold text-gray-900">
+          Explora el centro
+        </h2>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-4">
+          {BLOQUES_EXPLORA.map((bloque) => (
+            <Link key={bloque.href} href={bloque.href} className="cer-nav-card">
+              <h3 className="text-base font-semibold text-gray-900">
+                {bloque.titulo}
+              </h3>
+              <p className="text-xs text-gray-600">{bloque.descripcion}</p>
+            </Link>
           ))}
-        </div>
-      </section>
-
-      {/* BLOQUES RESUMEN A OTRAS SECCIONES */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Explora el centro</h2>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          <Link
-            href="/sobre"
-            className="block rounded-2xl border border-gray-200 bg-white p-4 text-sm shadow-sm hover:border-emerald-500 transition"
-          >
-            <h3 className="mb-1 text-base font-semibold">Sobre el centro</h3>
-            <p className="text-xs text-gray-600">
-              Conoce la misión, visión, equipo y contexto institucional del
-              centro.
-            </p>
-          </Link>
-
-          <Link
-            href="/publicaciones"
-            className="block rounded-2xl border border-gray-200 bg-white p-4 text-sm shadow-sm hover:border-emerald-500 transition"
-          >
-            <h3 className="mb-1 text-base font-semibold">Publicaciones</h3>
-            <p className="text-xs text-gray-600">
-              Accede a artículos, informes técnicos y otros resultados de
-              investigación.
-            </p>
-          </Link>
-
-          <Link
-            href="/proyectos"
-            className="block rounded-2xl border border-gray-200 bg-white p-4 text-sm shadow-sm hover:border-emerald-500 transition"
-          >
-            <h3 className="mb-1 text-base font-semibold">Proyectos</h3>
-            <p className="text-xs text-gray-600">
-              Revisa los proyectos en curso y finalizados en energías
-              renovables y transición energética.
-            </p>
-          </Link>
         </div>
       </section>
     </div>

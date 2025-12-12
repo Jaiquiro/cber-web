@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* === COLORES BASE (modo claro/oscuro) === */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  /* Fondo general académico */
+  --background: #f3f4f6; /* gris tipo gray-100 */
+  --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #020617; /* slate-950 */
+    --foreground: #e5e7eb; /* gray-200 */
   }
 }
 
+/* === THEME CER (tokens que Tailwind convierte en clases) === */
+
+@theme {
+  /* mapeamos los colores al sistema de Tailwind */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-cer-green: #22c55e; /* primario */
+  --color-cer-dark: #064e3b; /* verde oscuro institucional */
+  --color-cer-light: #bbf7d0; /* verde suave */
+  --color-cer-blue: #0ea5e9; /* azul secundario */
+  --color-cer-gray: #f3f4f6; /* gris académico */
+
+  /* aliases opcionales */
+  --color-brand-primary: var(--color-cer-green);
+  --color-brand-secondary: var(--color-cer-blue);
+}
+
+/* === ESTILOS BASE === */
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* === COMPONENTES CER (NO usamos @apply btn, solo utilidades existentes) === */
+
+@layer components {
+  /* Contenedor principal */
+  .cer-container {
+    @apply mx-auto w-full max-w-6xl px-4 py-8 md:px-8 lg:px-10;
+  }
+
+  /*tarjetas tipo pastilla para lineas de investigacion*/
+  .cer-pill-card {
+    @apply flex items-center justify-center rounded-full border border-cer-light bg-cer-light/10 px-5 py-3 text-sm text-gray-900 text-center transition-colors;
+  }
+
+  .cer-pill-card:hover {
+    @apply border-cer-green bg-cer-light/40;
+  }
+
+  /* Tarjetas de navegación (Explora el centro) */
+  .cer-nav-card {
+    @apply rounded-2xl border border-cer-light bg-white/95 p-4 text-sm shadow-sm transition-colors flex flex-col gap-1;
+  }
+
+  .cer-nav-card:hover {
+    @apply border-cer-green bg-cer-light/20;
+  }
+
+  /* Botones */
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-colors;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-colors bg-cer-green text-white hover:bg-cer-dark;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-colors border border-cer-light bg-white text-cer-dark hover:bg-cer-light/20;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-colors bg-transparent text-cer-blue hover:bg-cer-light/20;
+  }
+
+  /* Tarjetas */
+
+  .cer-card {
+    @apply rounded-2xl border border-cer-light bg-white p-4 text-sm shadow-sm;
+  }
+
+  .cer-card-dark {
+    @apply rounded-2xl border border-cer-light bg-slate-900/80 p-4 text-sm text-gray-100 shadow-xl;
+  }
+
+  /* Links de texto */
+
+  .cer-link {
+    @apply text-sm font-semibold text-cer-blue hover:underline;
+  }
+
+  /* Badges / subtítulos */
+
+  .cer-badge {
+    @apply inline-flex items-center rounded-full bg-cer-light/60 px-3 py-1 text-[11px] font-medium text-cer-dark;
+  }
+
+  .cer-section-subtitle {
+    @apply text-xs uppercase tracking-widest text-cer-dark;
+  }
+}
+
+/* === Fondo global con imagen + overlay === */
+
+body {
+  position: relative;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Imagen de fondo global */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("/images/wd.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.25; /* ajusta la intensidad */
+  z-index: -2;
+}
+
+/* Capa de color para respetar el branding CER */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 32, 55, 0.4) 0%,
+    rgba(0, 55, 85, 0.4) 40%,
+    rgba(0, 70, 60, 0.5) 100%
+  );
+
+  z-index: -1;
 }

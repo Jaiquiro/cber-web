@@ -2,15 +2,18 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Inter } from "next/font/google";
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
-// Metadatos básicos del sitio (título y descripción)
 export const metadata: Metadata = {
   title: "Centro de Energías Renovables",
   description:
-    "Noticias, proyectos y publicaciones del Centro de Energías Renovables.",
+    "Portal institucional del Centro de Energías Renovables: noticias, publicaciones, proyectos y eventos.",
 };
 
-// Layout raíz que envuelve a todas las páginas
 export default function RootLayout({
   children,
 }: {
@@ -18,14 +21,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="min-h-screen bg-gray-50 text-gray-900">
-        {/* Cabecera fija para todo el sitio */}
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
+        {/* Enlace para lectores de pantalla / teclado */}
+        <a
+          href="#contenido-principal"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:shadow-lg"
+        >
+          Saltar al contenido principal
+        </a>
+
         <Header />
 
-        {/* Contenido principal, centrado y con márgenes */}
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+        <main id="contenido-principal" className="flex-1 cer-container">
+          {children}
+        </main>
 
-        {/* Pie de página */}
         <Footer />
       </body>
     </html>
