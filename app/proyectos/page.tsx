@@ -3,35 +3,36 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-// Definimos las líneas una sola vez
+/* ===============================
+   Líneas de investigación
+================================ */
 const LINEAS = [
-  {
-    id: "solar",
-    nombre: "Recurso solar fotovoltaico y térmico",
-  },
-  {
-    id: "eolica",
-    nombre: "Energía eólica y sistemas híbridos",
-  },
-  {
-    id: "hidrogeno",
-    nombre: "Hidrógeno verde y vectores energéticos",
-  },
-  {
-    id: "eficiencia",
-    nombre: "Eficiencia energética y auditorías",
-  },
+  { id: "solar", nombre: "Recurso solar fotovoltaico y térmico" },
+  { id: "eolica", nombre: "Energía eólica y sistemas híbridos" },
+  { id: "hidrogeno", nombre: "Hidrógeno verde y vectores energéticos" },
+  { id: "eficiencia", nombre: "Eficiencia energética y auditorías" },
   {
     id: "microrredes",
     nombre: "Microrredes, redes inteligentes y almacenamiento",
   },
-  {
-    id: "politicas",
-    nombre: "Modelación energética y políticas públicas",
-  },
+  { id: "politicas", nombre: "Modelación energética y políticas públicas" },
 ];
 
-// Mock de proyectos (aquí luego metes los reales)
+/* ===============================
+   Gradientes por línea
+================================ */
+const LINEA_GRADIENT: Record<string, string> = {
+  solar: "from-amber-500 via-emerald-600 to-cer-blue",
+  eolica: "from-sky-600 via-cer-blue to-cer-dark",
+  hidrogeno: "from-emerald-600 via-teal-600 to-cer-blue",
+  eficiencia: "from-lime-600 via-emerald-700 to-cer-dark",
+  microrredes: "from-indigo-600 via-sky-600 to-cer-blue",
+  politicas: "from-slate-700 via-cer-dark to-cer-blue",
+};
+
+/* ===============================
+   Mock de proyectos
+================================ */
 const PROYECTOS = [
   {
     id: "atlas-solar-2026",
@@ -57,12 +58,14 @@ const PROYECTOS = [
     resumen:
       "Auditorías energéticas en empresas industriales para identificar medidas de ahorro.",
   },
-  // …añade tus proyectos reales aquí
 ];
 
+/* ===============================
+   Página
+================================ */
 export default function ProyectosPage() {
   const searchParams = useSearchParams();
-  const lineaSeleccionada = searchParams.get("linea"); // puede ser null
+  const lineaSeleccionada = searchParams.get("linea");
 
   const proyectosFiltrados =
     lineaSeleccionada && LINEAS.some((l) => l.id === lineaSeleccionada)
@@ -73,17 +76,13 @@ export default function ProyectosPage() {
 
   return (
     <div className="space-y-8">
-      {/* Encabezado */}
+      {/* ================= Encabezado ================= */}
       <section className="cer-section">
-        <h1 className="text-2xl font-semibold text-gray-900">
+        <h1 className="text-2xl font-semibold text-gray-1000">
           Proyectos de investigación
         </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Esta sección reúne los proyectos en los que trabaja el centro,
-          organizados según las líneas de investigación.
-        </p>
 
-        {/* Filtros por línea */}
+        {/* ===== Filtros ===== */}
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             href="/proyectos"
@@ -114,7 +113,6 @@ export default function ProyectosPage() {
           })}
         </div>
 
-        {/* Texto breve de la línea activa (si hay filtro) */}
         {lineaActiva && (
           <p className="mt-3 text-xs text-gray-500">
             Mostrando proyectos en la línea:{" "}
@@ -123,35 +121,62 @@ export default function ProyectosPage() {
         )}
       </section>
 
-      {/* Listado de proyectos */}
+      {/* ================= Grid de proyectos ================= */}
       <section className="cer-section">
         {proyectosFiltrados.length === 0 ? (
           <p className="text-sm text-gray-600">
-            No hay proyectos registrados aún en esta línea. Puedes registrar
-            nuevos proyectos o seleccionar otra línea.
+            No hay proyectos registrados aún en esta línea.
           </p>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {proyectosFiltrados.map((proyecto) => {
               const linea = LINEAS.find((l) => l.id === proyecto.lineaId);
+              const gradient =
+                LINEA_GRADIENT[proyecto.lineaId] ??
+                "from-cer-dark via-emerald-700 to-cer-blue";
+
               return (
-                <article key={proyecto.id} className="cer-card">
-                  <p className="text-[11px] uppercase tracking-widest text-cer-dark mb-1">
-                    {linea?.nombre ?? "Línea no especificada"}
-                  </p>
-                  <h2 className="text-base font-semibold text-gray-900">
-                    {proyecto.titulo}
-                  </h2>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Estado:{" "}
-                    <span className="font-medium text-gray-800">
-                      {proyecto.estado}
-                    </span>
-                  </p>
-                  <p className="mt-2 text-sm text-gray-700">
-                    {proyecto.resumen}
-                  </p>
-                </article>
+                <Link
+                  key={proyecto.id}
+                  href={`/proyectos/${proyecto.id}`}
+                  className="group block overflow-hidden rounded-2xl border border-white/20 bg-white/90 shadow-sm backdrop-blur
+                             transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                >
+                  {/* Header visual */}
+                  <div className={`h-32 bg-gradient-to-br ${gradient}`} />
+
+                  {/* Contenido */}
+                  <div className="p-4 space-y-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-cer-dark">
+                      {linea?.nombre ?? "Línea no especificada"}
+                    </p>
+
+                    <h2 className="text-base font-semibold text-gray-900 leading-snug">
+                      {proyecto.titulo}
+                    </h2>
+
+                    <p className="text-xs text-gray-500">
+                      Estado:{" "}
+                      <span className="font-semibold text-gray-800">
+                        {proyecto.estado}
+                      </span>
+                    </p>
+
+                    <p className="text-sm text-gray-700 line-clamp-3">
+                      {proyecto.resumen}
+                    </p>
+
+                    <div className="pt-2 flex items-center justify-between">
+                      <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                        {proyecto.estado}
+                      </span>
+
+                      <span className="text-[11px] font-semibold text-cer-blue group-hover:underline">
+                        Ver proyecto →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
               );
             })}
           </div>

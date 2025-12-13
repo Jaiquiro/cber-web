@@ -122,7 +122,7 @@ export default function HomePage() {
                 </Link>
 
                 <Link
-                  href="/eventos/taller-hidrogeno-verde-introductorio"
+                  href="/noticias/taller-hidrogeno-verde-introductorio"
                   className="block cer-card-dark"
                 >
                   <p className="text-xs text-gray-300">
