@@ -16,7 +16,7 @@ export function Header() {
     { href: "/publicaciones", label: "Publicaciones" },
     { href: "/proyectos", label: "Proyectos" },
     //{ href: "/eventos", label: "Eventos" },
-    { href: "/equipo", label: "Equipo" },
+    //{ href: "/equipo", label: "Equipo" },
   ];
 
   return (

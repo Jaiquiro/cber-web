@@ -1,34 +1,29 @@
-// Datos de ejemplo para la sección de equipo
-
 export type MiembroEquipo = {
+  id: string;
   nombre: string;
-  cargo: string;
-  linea: string; // línea de investigación principal
-  email?: string;
+  rol: string;
+  area: string;
+  foto?: string;
 };
 
 export const equipoMock: MiembroEquipo[] = [
   {
-    nombre: "Dra. Nombre Apellido",
-    cargo: "Directora del Centro",
-    linea: "Políticas energéticas y planificación",
-    email: "directora@cer.edu.bo",
+    id: "director",
+    nombre: "Nombre Apellido",
+    rol: "Director del Centro",
+    area: "Gestión e Investigación",
+    foto: "/equipo/director.jpg",
   },
   {
-    nombre: "Ing. Nombre Apellido2",
-    cargo: "Investigador en energías renovables",
-    linea: "Energía solar fotovoltaica y recursos energéticos",
-    email: "investigador.solar@cer.edu.bo",
+    id: "investigador-1",
+    nombre: "Nombre Apellido",
+    rol: "Investigador",
+    area: "Energía solar y sistemas híbridos",
   },
   {
-    nombre: "MSc. Nombre Apellido",
-    cargo: "Investigador en hidrógeno verde",
-    linea: "Hidrógeno verde y almacenamiento",
-    email: "investigador.h2v@cer.edu.bo",
-  },
-  {
-    nombre: "Ing. Nombre Apellido",
-    cargo: "Asistente de investigación",
-    linea: "Eficiencia energética y auditorías",
+    id: "investigador-2",
+    nombre: "Nombre Apellido",
+    rol: "Investigador",
+    area: "Hidrógeno verde",
   },
 ];

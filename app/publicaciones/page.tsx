@@ -1,17 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { getPublicaciones } from "@/lib/publicacionesApi";
+import { useSearchParams } from "next/navigation";
 
-type SearchParams = {
-  tipo?: string;
-};
+import { publicacionesMock } from "@/lib/publicacionesMock";
 
 const FILTROS = [
   { id: "todo", label: "Todo" },
   { id: "cientifico", label: "Científico" },
   { id: "editorial", label: "Editorial" },
   { id: "opinion", label: "Opinión" },
-];
+] as const;
 
 const TIPO_BADGE: Record<string, string> = {
   cientifico: "bg-emerald-100 text-emerald-800",
@@ -21,8 +21,7 @@ const TIPO_BADGE: Record<string, string> = {
 
 function badgeForTipo(tipo?: string) {
   if (!tipo) return "bg-gray-100 text-gray-800";
-  const key = tipo.toLowerCase();
-  return TIPO_BADGE[key] ?? "bg-gray-100 text-gray-800";
+  return TIPO_BADGE[tipo.toLowerCase()] ?? "bg-gray-100 text-gray-800";
 }
 
 function labelTipo(tipo?: string) {
@@ -34,29 +33,26 @@ function labelTipo(tipo?: string) {
   return tipo;
 }
 
-export default async function PublicacionesPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  const publicaciones = await getPublicaciones();
-
-  const filtro = (searchParams.tipo ?? "todo").toLowerCase();
+export default function PublicacionesPage() {
+  const searchParams = useSearchParams();
+  const filtro = (searchParams.get("tipo") ?? "todo").toLowerCase();
 
   const filtradas =
     filtro === "todo"
-      ? publicaciones
-      : publicaciones.filter(
-          (p: any) => (p.tipo ?? "").toLowerCase() === filtro
-        );
+      ? publicacionesMock
+      : publicacionesMock.filter((p) => p.tipo === filtro);
 
   return (
     <div className="space-y-8">
-      {/* Encabezado con contraste (mismo patrón CER) */}
+      {/* Encabezado */}
       <section className="relative cer-section overflow-hidden">
         <div className="absolute inset-0 bg-black/30 rounded-2xl pointer-events-none" />
         <div className="relative">
           <h1 className="text-2xl font-semibold text-white">Publicaciones</h1>
+          <p className="mt-2 text-sm text-white/85 max-w-2xl">
+            Artículos científicos, editoriales y textos de opinión vinculados a
+            la transición energética y energías renovables.
+          </p>
 
           {/* Filtros */}
           <div className="mt-4 flex flex-wrap gap-2">
@@ -85,7 +81,7 @@ export default async function PublicacionesPage({
         </div>
       </section>
 
-      {/* Listado horizontal */}
+      {/* Listado */}
       <section className="cer-section">
         {filtradas.length === 0 ? (
           <p className="text-sm text-gray-600">
@@ -93,7 +89,7 @@ export default async function PublicacionesPage({
           </p>
         ) : (
           <div className="space-y-3">
-            {filtradas.map((p: any) => (
+            {filtradas.map((p) => (
               <Link
                 key={p.slug}
                 href={`/publicaciones/${p.slug}`}
@@ -126,6 +122,11 @@ export default async function PublicacionesPage({
                         )}`}
                       >
                         {labelTipo(p.tipo)}
+                      </span>
+
+                      {/* Texto académico visible */}
+                      <span className="text-xs text-gray-500">
+                        · {p.categoria}
                       </span>
                     </div>
 

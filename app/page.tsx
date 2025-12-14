@@ -20,12 +20,6 @@ const BLOQUES_EXPLORA = [
     descripcion:
       "Proyectos en curso y finalizados relacionados con la transición energética.",
   },
-  {
-    href: "/equipo",
-    titulo: "Equipo",
-    descripcion:
-      "Conoce al equipo de investigación y apoyo técnico del centro.",
-  },
 ];
 const LINEAS_INVESTIGACION = [
   {
@@ -184,7 +178,7 @@ export default function HomePage() {
           Explora el centro
         </h2>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-4">
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
           {BLOQUES_EXPLORA.map((bloque) => (
             <Link key={bloque.href} href={bloque.href} className="cer-nav-card">
               <h3 className="text-base font-semibold text-gray-900">
