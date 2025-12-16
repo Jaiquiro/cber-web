@@ -49,10 +49,6 @@ export default function PublicacionesPage() {
         <div className="absolute inset-0 bg-black/30 rounded-2xl pointer-events-none" />
         <div className="relative">
           <h1 className="text-2xl font-semibold text-white">Publicaciones</h1>
-          <p className="mt-2 text-sm text-white/85 max-w-2xl">
-            Artículos científicos, editoriales y textos de opinión vinculados a
-            la transición energética y energías renovables.
-          </p>
 
           {/* Filtros */}
           <div className="mt-4 flex flex-wrap gap-2">

@@ -1,12 +1,12 @@
 // Datos de ejemplo para Publicaciones antes de conectar el backend
 
+//import { reportWebVitals } from "next/dist/build/templates/pages";
+
 export type Publicacion = {
   slug: string;
   titulo: string;
   anio: number;
 
-
-  
   // Tipo lógico (para filtros y layout)
   tipo: "cientifico" | "editorial" | "opinion";
 
@@ -14,6 +14,12 @@ export type Publicacion = {
   categoria: string;
 
   resumen: string;
+
+  // Contenido completo (markdown o HTML)
+  contenido?: string;
+
+  //url del pdf o recurso asociado
+  pdfUrl?: string;
 
   // Carátula opcional
   cover?: string;
@@ -29,7 +35,10 @@ export const publicacionesMock: Publicacion[] = [
     categoria: "Artículo científico",
     resumen:
       "Análisis del recurso solar y escenarios de expansión fotovoltaica en el altiplano.",
+    contenido:
+      "Este artículo presenta un análisis detallado del potencial solar fotovoltaico en el altiplano boliviano, considerando factores geográficos, climáticos y técnicos para proponer escenarios de expansión sostenible.",
     cover: "/covers/cv1.png",
+    pdfUrl: "/papers/articulo_educacion.docx",
   },
   {
     slug: "hoja-de-ruta-hidrogeno-verde-bolivia",

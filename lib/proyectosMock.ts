@@ -9,7 +9,7 @@ export type Proyecto = {
 
 export const proyectosMock: Proyecto[] = [
   {
-    slug: "microred-hibrida-altiplano",
+    slug: "potencial-solar-altiplano-2025",
     nombre: "Diseño de microred híbrida diésel–solar en el altiplano",
     estado: "En curso",
     responsable: "Ing. Nombre Apellido",

@@ -1,34 +1,52 @@
+// app/publicaciones/[slug]/page.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { getPublicacionPorSlug } from "@/lib/publicacionesApi";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+type Params = { slug: string };
 
 interface PublicacionDetallePageProps {
-  params: { slug: string };
+  params: Promise<Params>; // 👈 en Next 16 puede venir como Promise
 }
 
-const TIPO_BADGE: Record<string, string> = {
+const TIPO_BADGE = {
   cientifico: "bg-emerald-100 text-emerald-900 border-emerald-200",
   editorial: "bg-slate-100 text-slate-900 border-slate-200",
   opinion: "bg-sky-100 text-sky-900 border-sky-200",
-};
+} as const;
+
+type Tipo = keyof typeof TIPO_BADGE;
+
+function normalizeTipo(tipo?: string): Tipo | null {
+  if (!tipo) return null;
+  const t = tipo.toLowerCase().trim();
+  if (t === "cientifico" || t === "editorial" || t === "opinion") return t;
+  return null;
+}
 
 function badgeForTipo(tipo?: string) {
-  if (!tipo) return "bg-gray-100 text-gray-900 border-gray-200";
-  return TIPO_BADGE[tipo] ?? "bg-gray-100 text-gray-900 border-gray-200";
+  const t = normalizeTipo(tipo);
+  if (!t) return "bg-gray-100 text-gray-900 border-gray-200";
+  return TIPO_BADGE[t];
 }
 
 function labelTipo(tipo?: string) {
-  if (!tipo) return "Publicación";
-  if (tipo === "cientifico") return "Científico";
-  if (tipo === "editorial") return "Editorial";
-  if (tipo === "opinion") return "Opinión";
-  return tipo;
+  const t = normalizeTipo(tipo);
+  if (!t) return "Publicación";
+  if (t === "cientifico") return "Científico";
+  if (t === "editorial") return "Editorial";
+  return "Opinión";
 }
 
 export default async function PublicacionDetallePage({
   params,
 }: PublicacionDetallePageProps) {
-  const publicacion = await getPublicacionPorSlug(params.slug);
+  const { slug } = await params; // ✅ clave
+  console.log("▶️ SLUG:", slug);
+
+  const publicacion = await getPublicacionPorSlug(slug);
 
   if (!publicacion) {
     return (
@@ -51,11 +69,11 @@ export default async function PublicacionDetallePage({
     );
   }
 
-  const esCientifico = publicacion.tipo === "cientifico";
+  const tipoNorm = normalizeTipo(publicacion.tipo);
+  const esCientifico = tipoNorm === "cientifico";
 
   return (
     <div className="space-y-6">
-      {/* Navegación */}
       <div className="flex items-center justify-between">
         <Link
           href="/publicaciones"
@@ -73,10 +91,8 @@ export default async function PublicacionDetallePage({
         </span>
       </div>
 
-      {/* Layout científico: carátula + ficha */}
       {esCientifico ? (
         <section className="grid gap-6 lg:grid-cols-[260px_1fr]">
-          {/* Carátula */}
           <div className="cer-card overflow-hidden p-0">
             <div className="relative aspect-[3/4] w-full">
               {publicacion.cover ? (
@@ -94,60 +110,66 @@ export default async function PublicacionDetallePage({
             </div>
           </div>
 
-          {/* Contenido */}
           <article className="cer-card">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs text-white/80">{publicacion.anio}</span>
-
-              <span className="text-xs text-white/70">·</span>
-
-              <span className="text-xs text-white/80">
+              <span className="text-xs text-gray/80">{publicacion.anio}</span>
+              <span className="text-xs text-gray/70">·</span>
+              <span className="text-xs text-gray/80">
                 {publicacion.categoria ?? "Publicación científica"}
               </span>
             </div>
 
-            <h1 className="mt-3 text-2xl font-semibold text-white leading-tight">
+            <h1 className="mt-3 text-2xl font-semibold text-black leading-tight">
               {publicacion.titulo}
             </h1>
+            <p className="mt-3 text-sm text-black">{publicacion.resumen}</p>
 
-            <p className="mt-3 text-sm text-white/85">{publicacion.resumen}</p>
-
-            {/* Placeholder institucional (listo para backend) */}
-            <div className="mt-5 rounded-2xl border border-white/15 bg-white/5 p-4">
-              <p className="text-xs font-semibold uppercase tracking-widest text-white/70">
-                Próximamente
-              </p>
-              <p className="mt-2 text-sm text-white/80">
-                Aquí podrás mostrar autores, afiliación, revista/congreso, DOI,
-                palabras clave y enlaces al PDF cuando el backend esté
-                conectado.
-              </p>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
-                  Autores
-                </span>
-                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
-                  DOI
-                </span>
-                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
-                  PDF
-                </span>
+            {publicacion.contenido ? (
+              <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-5">
+                <h2 className="text-sm font-semibold text-black mb-3">
+                  Contenido
+                </h2>
+                <div className="space-y-3 text-sm leading-relaxed text-black/85">
+                  {publicacion.contenido
+                    .trim()
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((line, idx) => (
+                      <p key={idx}>{line}</p>
+                    ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-5">
+                <p className="text-sm text-white/80">
+                  Aún no se ha publicado el contenido completo.
+                </p>
+              </div>
+            )}
+
+            {publicacion.pdfUrl && (
+              <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/5 p-4">
+                <p className="text-sm text-white/80">
+                  Documento disponible en PDF.
+                </p>
+                <a
+                  href={publicacion.pdfUrl}
+                  download
+                  className="inline-flex items-center rounded-lg bg-cer-green px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 transition"
+                >
+                  Descargar PDF
+                </a>
+              </div>
+            )}
           </article>
         </section>
       ) : (
-        /* Layout editorial/opinión: lectura tipo artículo */
         <section className="cer-card">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs text-white/80">{publicacion.anio}</span>
             <span className="text-xs text-white/70">·</span>
             <span className="text-xs text-white/80">
-              {publicacion.categoria ??
-                (publicacion.tipo === "editorial"
-                  ? "Editorial"
-                  : "Artículo de opinión")}
+              {publicacion.categoria ?? "Publicación"}
             </span>
           </div>
 
@@ -155,7 +177,6 @@ export default async function PublicacionDetallePage({
             {publicacion.titulo}
           </h1>
 
-          {/* Banda / carátula opcional arriba */}
           <div className="mt-4 overflow-hidden rounded-2xl border border-white/15">
             <div className="relative h-40 w-full">
               {publicacion.cover ? (
@@ -179,12 +200,43 @@ export default async function PublicacionDetallePage({
               {publicacion.resumen}
             </p>
 
-            <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-4">
-              <p className="text-sm text-white/80">
-                Aquí irá el contenido completo del editorial/opinión cuando lo
-                conectemos al backend o CMS (bloques, markdown o rich text).
-              </p>
-            </div>
+            {publicacion.contenido ? (
+              <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-5">
+                <h2 className="text-sm font-semibold text-white mb-3">
+                  Contenido
+                </h2>
+                <div className="space-y-3 text-sm leading-relaxed text-white/85">
+                  {publicacion.contenido
+                    .trim()
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((line, idx) => (
+                      <p key={idx}>{line}</p>
+                    ))}
+                </div>
+              </div>
+            ) : (
+              <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-5">
+                <p className="text-sm text-white/80">
+                  Aún no se ha publicado el contenido completo.
+                </p>
+              </div>
+            )}
+
+            {publicacion.pdfUrl && (
+              <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/5 p-4">
+                <p className="text-sm text-white/80">
+                  Documento disponible en PDF.
+                </p>
+                <a
+                  href={publicacion.pdfUrl}
+                  download
+                  className="inline-flex items-center rounded-lg bg-cer-green px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 transition"
+                >
+                  Descargar PDF
+                </a>
+              </div>
+            )}
           </div>
         </section>
       )}

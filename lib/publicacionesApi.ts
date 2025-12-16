@@ -20,6 +20,11 @@ export async function getPublicacionPorSlug(
   slug: string
 ): Promise<Publicacion | null> {
   if (USE_MOCK) {
+    console.log("Buscando publicación en mock para slug:", slug);
+    console.log(
+      "publicacionesMock:",
+      publicacionesMock.map((p) => p.slug)
+    );
     await new Promise((r) => setTimeout(r, 50));
     return publicacionesMock.find((p) => p.slug === slug) ?? null;
   }
