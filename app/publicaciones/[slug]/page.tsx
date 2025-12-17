@@ -93,14 +93,13 @@ export default async function PublicacionDetallePage({
 
       {esCientifico ? (
         <section className="grid gap-6 lg:grid-cols-[260px_1fr]">
-          <div className="cer-card overflow-hidden p-0">
-            <div className="relative aspect-[3/4] w-full">
+          <div className="cer-card overflow-hidden p-0 self-start">
+            <div className="relative h-[360px] w-full">
               {publicacion.cover ? (
                 <Image
                   src={publicacion.cover}
                   alt={`Carátula de ${publicacion.titulo}`}
                   fill
-                  sizes="260px"
                   className="object-cover"
                   priority
                 />
@@ -112,17 +111,17 @@ export default async function PublicacionDetallePage({
 
           <article className="cer-card">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs text-gray/80">{publicacion.anio}</span>
-              <span className="text-xs text-gray/70">·</span>
-              <span className="text-xs text-gray/80">
+              <span className="text-xs text-gray-500">{publicacion.anio}</span>
+              <span className="text-xs text-gray-400">·</span>
+              <span className="text-xs text-gray-600">
                 {publicacion.categoria ?? "Publicación científica"}
               </span>
             </div>
 
-            <h1 className="mt-3 text-2xl font-semibold text-black leading-tight">
+            <h1 className="mt-3 text-2xl font-semibold text-gray-900 leading-tight">
               {publicacion.titulo}
             </h1>
-            <p className="mt-3 text-sm text-black">{publicacion.resumen}</p>
+            <p className="mt-3 text-sm text-gray-700">{publicacion.resumen}</p>
 
             {publicacion.contenido ? (
               <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-5">
@@ -130,13 +129,9 @@ export default async function PublicacionDetallePage({
                   Contenido
                 </h2>
                 <div className="space-y-3 text-sm leading-relaxed text-black/85">
-                  {publicacion.contenido
-                    .trim()
-                    .split("\n")
-                    .filter(Boolean)
-                    .map((line, idx) => (
-                      <p key={idx}>{line}</p>
-                    ))}
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {publicacion.contenido}
+                  </ReactMarkdown>
                 </div>
               </div>
             ) : (

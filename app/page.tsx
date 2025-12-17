@@ -1,5 +1,7 @@
+// app/page.tsx
 import Link from "next/link";
 import Image from "next/image";
+import { getNoticias } from "@/lib/noticiasApi";
 
 const BLOQUES_EXPLORA = [
   {
@@ -21,6 +23,7 @@ const BLOQUES_EXPLORA = [
       "Proyectos en curso y finalizados relacionados con la transición energética.",
   },
 ];
+
 const LINEAS_INVESTIGACION = [
   {
     id: "solar",
@@ -45,7 +48,19 @@ const LINEAS_INVESTIGACION = [
   },
 ];
 
-export default function HomePage() {
+function normalizeCategoria(categoria?: string) {
+  // Para evitar problemas por mayúsculas/minúsculas (Convocatoria vs convocatoria)
+  const c = (categoria ?? "").trim().toLowerCase();
+  if (!c) return "Actualización";
+  return c.charAt(0).toUpperCase() + c.slice(1);
+}
+
+export default async function HomePage() {
+  const noticias = await getNoticias();
+
+  // Por ahora: tomamos las primeras 2 (si luego quieres "más recientes" por fecha real, lo ordenamos)
+  const top = noticias.slice(0, 2);
+
   return (
     <div className="space-y-12">
       {/* HERO PRINCIPAL */}
@@ -98,38 +113,27 @@ export default function HomePage() {
               <h2 className="text-base font-semibold">Últimas novedades</h2>
 
               <div className="space-y-3">
-                <Link
-                  href="/noticias/programa-hidrogeno-verde-2026"
-                  className="block cer-card-dark"
-                >
-                  <p className="text-xs text-gray-300">
-                    Convocatoria · 15 enero 2026
-                  </p>
-                  <p className="font-semibold text-white">
-                    Lanzamiento del programa de investigación en hidrógeno verde
-                    2026
-                  </p>
-                  <p className="mt-1 text-xs text-gray-200">
-                    Iniciativa orientada a proyectos de I+D en producción,
-                    almacenamiento y uso de hidrógeno verde.
-                  </p>
-                </Link>
-
-                <Link
-                  href="/noticias/taller-hidrogeno-verde-introductorio"
-                  className="block cer-card-dark"
-                >
-                  <p className="text-xs text-gray-300">
-                    Evento · 3 febrero 2026 · Virtual
-                  </p>
-                  <p className="font-semibold text-white">
-                    Taller introductorio sobre hidrógeno verde
-                  </p>
-                  <p className="mt-1 text-xs text-gray-200">
-                    Sesión de formación para profesionales e investigadores
-                    interesados en el vector hidrógeno.
-                  </p>
-                </Link>
+                {top.length === 0 ? (
+                  <div className="block cer-card-dark">
+                    <p className="text-xs text-gray-200">
+                      Aún no hay noticias publicadas.
+                    </p>
+                  </div>
+                ) : (
+                  top.map((n) => (
+                    <Link
+                      key={n.slug}
+                      href={`/noticias/${n.slug}`}
+                      className="block cer-card-dark"
+                    >
+                      <p className="text-xs text-gray-300">
+                        {normalizeCategoria(n.categoria)} · {n.fecha}
+                      </p>
+                      <p className="font-semibold text-white">{n.titulo}</p>
+                      <p className="mt-1 text-xs text-gray-200">{n.resumen}</p>
+                    </Link>
+                  ))
+                )}
               </div>
 
               <div className="flex justify-end">
@@ -143,17 +147,16 @@ export default function HomePage() {
       </section>
 
       {/* LÍNEAS DE INVESTIGACIÓN */}
-      {/* Dentro de la sección “Líneas de investigación” */}
       <div className="grid gap-6 md:grid-cols-3 mt-6">
         {LINEAS_INVESTIGACION.map((linea) => (
           <Link
             key={linea.id}
             href={`/proyectos?linea=${linea.id}`}
             className="
-        group relative rounded-xl overflow-hidden shadow-lg 
-        transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl
-        cursor-pointer block
-      "
+              group relative rounded-xl overflow-hidden shadow-lg
+              transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl
+              cursor-pointer block
+            "
             style={{
               backgroundImage: `url(${linea.imagen})`,
               backgroundSize: "cover",
@@ -161,7 +164,7 @@ export default function HomePage() {
             }}
           >
             {/* Capa de oscurecimiento */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70" />
 
             {/* Contenido */}
             <div className="relative p-6 text-white">

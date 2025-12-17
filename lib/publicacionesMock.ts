@@ -35,8 +35,26 @@ export const publicacionesMock: Publicacion[] = [
     categoria: "Artículo científico",
     resumen:
       "Análisis del recurso solar y escenarios de expansión fotovoltaica en el altiplano.",
-    contenido:
-      "Este artículo presenta un análisis detallado del potencial solar fotovoltaico en el altiplano boliviano, considerando factores geográficos, climáticos y técnicos para proponer escenarios de expansión sostenible.",
+    contenido: `
+## Introducción
+
+Este artículo presenta un análisis detallado del potencial solar fotovoltaico
+en el altiplano boliviano.
+
+## Metodología
+
+Se analizaron datos climáticos, geográficos y técnicos provenientes de
+estudios nacionales e internacionales.
+
+- Radiación solar
+- Temperatura
+- Altitud
+
+## Conclusiones
+
+El altiplano presenta condiciones altamente favorables para el desarrollo
+fotovoltaico a gran escala.
+`,
     cover: "/covers/cv1.png",
     pdfUrl: "/papers/articulo_educacion.docx",
   },

@@ -88,7 +88,7 @@ body {
   /* Tarjetas */
 
   .cer-card {
-    @apply rounded-2xl border border-cer-light bg-white p-4 text-sm shadow-sm;
+    @apply rounded-2xl border border-cer-light bg-white/90 p-4 text-sm shadow-sm;
   }
 
   .cer-card-dark {
