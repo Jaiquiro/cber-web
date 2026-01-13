@@ -98,9 +98,7 @@ export default async function NoticiaDetallePage(props: PageProps) {
         {/* PDF opcional */}
         {noticia.pdfUrl && (
           <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/5 p-4">
-            <p className="text-sm text-black">
-              Documento disponible en PDF.
-            </p>
+            <p className="text-sm text-black">Documento disponible en PDF.</p>
             <a
               href={noticia.pdfUrl}
               download
